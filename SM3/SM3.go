@@ -22,6 +22,16 @@ var (
 	triedCount int64
 )
 
+// 判断是否为 ascii 模式下的爆破结果
+func isASCIICharset(s string) bool {
+	for _, r := range s {
+		if r > 0x7F {
+			return false
+		}
+	}
+	return true
+}
+
 // CrackSM3 attempts to brute-force a SM3 hash.
 func CrackSM3(hashStr string, length int, charset string) {
 	normalized := strings.ToLower(hashStr)
@@ -83,7 +93,11 @@ func tryMatch(candidate string) {
 	if bytes.Equal(hash[:], targetHash) {
 		mu.Lock()
 		if !found {
-			fmt.Printf("\n[FOUND] Plaintext: %s\n", candidate)
+			if isASCIICharset(candidate) {
+				fmt.Printf("\n[FOUND] Plaintext (hex): %x\n", []byte(candidate))
+			} else {
+				fmt.Printf("\n[FOUND] Plaintext: %s\n", candidate)
+			}
 			found = true
 		}
 		mu.Unlock()

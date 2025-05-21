@@ -83,7 +83,11 @@ func tryMatch(candidate string) {
 	if bytes.Equal(hash[:], targetHash) {
 		mu.Lock()
 		if !found {
-			fmt.Printf("\n[FOUND] Plaintext: %s\n", candidate)
+			if isASCIICharset(candidate) {
+				fmt.Printf("\n[FOUND] Plaintext (hex): %x\n", []byte(candidate))
+			} else {
+				fmt.Printf("\n[FOUND] Plaintext: %s\n", candidate)
+			}
 			found = true
 		}
 		mu.Unlock()
@@ -94,6 +98,16 @@ func isFound() bool {
 	mu.Lock()
 	defer mu.Unlock()
 	return found
+}
+
+// 判断是否为 ascii 模式下的爆破结果
+func isASCIICharset(s string) bool {
+	for _, r := range s {
+		if r > 0x7F {
+			return false
+		}
+	}
+	return true
 }
 
 func progressPrinter() {

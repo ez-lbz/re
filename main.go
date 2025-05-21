@@ -35,7 +35,10 @@ func main() {
 	case "alphanumeric":
 		charsetString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	case "ascii":
-		charsetString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ \t\n\r\x0b\x0c"
+		charsetString = ""
+		for i := 0; i <= 0x7F; i++ {
+			charsetString += string(rune(i))
+		}
 	default:
 		fmt.Println("[-] Invalid charset. Supported charsets: letters, alphanumeric, ascii.")
 		os.Exit(1)
