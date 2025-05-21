@@ -93,11 +93,7 @@ func tryMatch(candidate string) {
 	if bytes.Equal(hash[:], targetHash) {
 		mu.Lock()
 		if !found {
-			if isASCIICharset(candidate) {
-				fmt.Printf("\n[FOUND] Plaintext (hex): %x\n", []byte(candidate))
-			} else {
-				fmt.Printf("\n[FOUND] Plaintext: %s\n", candidate)
-			}
+			fmt.Printf("\n[FOUND] Plaintext (hex): %x\n", []byte(candidate))
 			found = true
 		}
 		mu.Unlock()
